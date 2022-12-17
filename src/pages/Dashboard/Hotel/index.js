@@ -1,29 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
-import UserContext from '../../../contexts/UserContext';
-import { toast } from 'react-toastify';
-import * as hotelsService from '../../../services/hotelApi';
 import styled from 'styled-components';
+import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/HotelPageErrorMessage';
+import useHotel from '../../../hooks/api/useHotel';
 
 export default function Hotel() {
-  const { userData } = useContext(UserContext);
-  const [hotelsData, setHotelsData] = useState(null);
-
-  useEffect(async() => {
-    try {
-      const res = await hotelsService.list(userData.token);
-      setHotelsData(res);
-    } catch (error) {
-      toast('Não foi possível consultar a lista de hotéis!');
-    }
-  }, [setHotelsData]);
-
+  const { hotelsData, hotelsError } = useHotel();
+  
   return (
     <Wrapper>
       <h1>Escolha de Quarto e Hotel</h1>
       {hotelsData === null ? (
-        <Contei>
-          <h2>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</h2>
-        </Contei>
+        <HotelPageErrorMessage errorMessage={hotelsError}/>
       ) : (
         <HotelsContainer>
           <h1>hoteis</h1>
@@ -48,19 +34,3 @@ const Wrapper = styled.div`
 
 const HotelsContainer = styled.div``;
 
-const Contei = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  h2 {
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 23px;
-    text-align: center;
-    color: #8e8e8e;
-    width: 80%;
-  }
-`;
