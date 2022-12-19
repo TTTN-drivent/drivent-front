@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/HotelPageErrorMessage';
-import RoomsContainer from '../../../components/Rooms/RoomsContainer';
 
 import useHotel from '../../../hooks/api/useHotel';
 import HotelsContainer from '../../../components/HotelsContainer/HotelsContainer';
@@ -16,7 +15,6 @@ export default function Hotel() {
       ) : (
         <HotelsContainer data={hotelsData}/>
       )}
-      <RoomsContainer />
     </Wrapper>
   );
 }

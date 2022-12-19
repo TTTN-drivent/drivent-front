@@ -1,14 +1,34 @@
 import styled from 'styled-components';
 import HotelBox from './HotelBox';
 import { useState, useEffect } from 'react';
+import RoomsContainer from '../Rooms/RoomsContainer';
+import useListRoom from '../../hooks/api/useListRoom';
 
 export default function HotelsContainer({ data }) {
-  const [selectedHotel, setSelectedHotel]= useState(null);  
+  const [selectedHotel, setSelectedHotel]= useState(null);
 
-  useEffect(async() => {
-    //quando mudar o selectedHotel faz uma nova requisição no banco para puxar os rooms
-    //if selectedHotel!== null useRooms
+  /*const search = () => {
+    if(selectedHotel!==null) {
+      console.log(selectedHotel);
+      const roomsData = useListRoom(selectedHotel.id);
+      console.log(roomsData);
+      return roomsData;
+    };
+  };
+
+  useEffect(() => search(), [selectedHotel]);
+
+   useEffect(async() => {
+    await getRooms();  
   }, [selectedHotel]);
+
+  async function getRooms() {
+    if (selectedHotel) {
+      const roomResponse = useListRoom(3);
+      //setRoomData(roomResponse.roomsData);
+      console.log(roomResponse);
+    }
+  } */
 
   return (
     <Wrapper>
@@ -16,6 +36,7 @@ export default function HotelsContainer({ data }) {
       <Container>
         {data.map((hotel) => <HotelBox hotelData={hotel} selectedHotel={selectedHotel} handleSelectHotel={setSelectedHotel}/>)}
       </Container>
+      <RoomsContainer />
     </Wrapper>
   );
 }
