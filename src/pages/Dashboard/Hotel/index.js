@@ -3,6 +3,7 @@ import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/Hot
 import RoomsContainer from '../../../components/Rooms/RoomsContainer';
 
 import useHotel from '../../../hooks/api/useHotel';
+import HotelsContainer from '../../../components/HotelsContainer/HotelsContainer';
 
 export default function Hotel() {
   const { hotelsData, hotelsError } = useHotel();
@@ -11,11 +12,9 @@ export default function Hotel() {
     <Wrapper>
       <h1>Escolha de Quarto e Hotel</h1>
       {hotelsData === null ? (
-        <HotelPageErrorMessage errorMessage={hotelsError}/>
+        <HotelPageErrorMessage errorMessage={hotelsError?.message}/>
       ) : (
-        <HotelsContainer>
-          <h1>hoteis</h1>
-        </HotelsContainer>
+        <HotelsContainer data={hotelsData}/>
       )}
       <RoomsContainer />
     </Wrapper>
@@ -28,11 +27,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   h1 {
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 34px;
     line-height: 40px;
     color: #000000;
   }
 `;
-
-const HotelsContainer = styled.div``;

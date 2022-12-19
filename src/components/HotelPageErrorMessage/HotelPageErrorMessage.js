@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   h2 {
+    font-family: 'Roboto', sans-serif;
     font-weight: 400;
     font-size: 20px;
     line-height: 23px;
