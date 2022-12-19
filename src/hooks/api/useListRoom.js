@@ -3,20 +3,20 @@ import useToken from '../useToken';
 
 import * as roomApi from '../../services/roomApi';
 
-export default function useListRoom(hotelId) {
+export default function useListRoom() {
   const token = useToken();
 
   const {
     data: roomsData,
     loading: roomLoading,
     error: roomError,
-    act: listRoom
-  } = useAsync(() => roomApi.getRoom(hotelId, token));
+    act: getRooms
+  } = useAsync((hotelId) => roomApi.getRoom(hotelId, token), false);
 
   return {
     roomsData,
     roomLoading,
     roomError,
-    listRoom
+    getRooms
   };
 }
