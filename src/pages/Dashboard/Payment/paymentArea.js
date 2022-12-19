@@ -19,7 +19,7 @@ export default function PaymentArea({ ticket }) {
     }
 
     if (ticket?.status === 'PAID') {
-      setPaymentDone(true);
+      setPaymentDone(false);
     }
   }, []);
 
