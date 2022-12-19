@@ -1,5 +1,6 @@
 import useTicket from '../../../hooks/api/useTicket';
 import PaymentArea from './paymentArea';
+import CreatedTicket from '../../../components/payment/index';
 
 export default function Payment() {
   const { ticket } = useTicket();
@@ -8,7 +9,7 @@ export default function Payment() {
     <>
       {
         !ticket ?
-          'No ticket Found' :
+          <CreatedTicket /> :
           <PaymentArea ticket={ticket} />
       }
     </>
