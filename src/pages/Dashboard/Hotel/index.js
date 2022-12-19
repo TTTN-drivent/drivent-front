@@ -1,15 +1,11 @@
 import styled from 'styled-components';
 import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/HotelPageErrorMessage';
-import Room from '../../../components/Rooms/Room';
+import RoomsContainer from '../../../components/Rooms/RoomsContainer';
+
 import useHotel from '../../../hooks/api/useHotel';
-import useListRoom from '../../../hooks/api/useListRoom';
-import Button from '../../../components/Form/Button';
-import { useState } from 'react';
 
 export default function Hotel() {
   const { hotelsData, hotelsError } = useHotel();
-  const [ selectedRoom, setSelectedRoom ] = useState(null);
-  const { roomsData } = useListRoom(3);
 
   return (
     <Wrapper>
@@ -21,19 +17,7 @@ export default function Hotel() {
           <h1>hoteis</h1>
         </HotelsContainer>
       )}
-      <RoomsWrapper>
-        <RoomsTitle>
-          Ótima pedida! Agora escolha seu quarto:
-        </RoomsTitle>
-        <RoomsContainer>
-          {roomsData?.Rooms.map((room) => <Room key={room.id} roomdata={room} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>)}
-        </RoomsContainer>
-        {selectedRoom ? (
-          <Button onClick={() => console.log(selectedRoom)}>
-            RESERVAR QUARTO
-          </Button>
-        ): ''}
-      </RoomsWrapper>
+      <RoomsContainer />
     </Wrapper>
   );
 }
@@ -52,22 +36,3 @@ const Wrapper = styled.div`
 `;
 
 const HotelsContainer = styled.div``;
-
-const RoomsWrapper = styled.div `
-  margin-top: 50px;
-`;
-
-const RoomsTitle = styled.div `
-  font-size: 400;
-  font-size: 20px;
-  color: #8E8E8E;
-  margin-bottom: 33px;
-`;
-
-const RoomsContainer = styled.div`
-  gap: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 45px;
-`;

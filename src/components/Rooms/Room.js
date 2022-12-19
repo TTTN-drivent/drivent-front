@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default function Room({ roomdata, selectedRoom, setSelectedRoom }) {
   const roomNumber = roomdata.name;
   const roomCapacity = roomdata.capacity;
-  // const roomBookings = roomdata.Booking.length;
+  //const roomBookings = roomdata.Booking.length;
   const roomBookings = 2;
   const isRoomFull = roomBookings>=roomCapacity;
   const capacityArray = [];
@@ -27,10 +27,9 @@ export default function Room({ roomdata, selectedRoom, setSelectedRoom }) {
         {roomNumber}
       </RoomNumber>
       <RoomCapacity isFull={isRoomFull} isSeletec={isSeletec}>
-        {capacityArray.map((booking, index) => booking ?  <IoPerson key={index}/> : <IoPersonOutline key={index}/>)}
+        {capacityArray.map((booking, index) => booking ?  <div><IoPerson key={index}/></div> : <div><IoPersonOutline key={index}/></div>)}
       </RoomCapacity>
     </RoomWrapper>
-
   );
 }
 
