@@ -1,36 +1,14 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import useListRoom from '../../hooks/api/useListRoom';
 
 export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }) {
   const [hotelRoomInfo, setHotelRoomInfo] = useState(null);
-  const [hotelApi, setHotelApi] = useState(null);
   const { roomsData, getRooms } = useListRoom();
 
-  const getDataFromApi = useCallback(async() => {await getRooms(hotelData.id);}, []);
-
-  // const handleRoomInfo = useCallback(() => {
-  //   const roomsCapacity = roomsData?.Rooms.map((room) => room.capacity);
-  //   roomsCapacity?.sort();
-  //   let roomTypes = [];
-  //   roomsCapacity?.forEach((capacity) => {
-  //     if (capacity === 1 && !roomTypes.includes('single')) {
-  //       roomTypes.push('single');
-  //     } else if (capacity === 2 && !roomTypes.includes('double')) {
-  //       roomTypes.push('double');
-  //     } else if (capacity === 3 && !roomTypes.includes('triple')) {
-  //       roomTypes.push('triple');
-  //     }
-  //   });
-  //   if (roomTypes.length === 1) roomTypes = 'Single';
-  //   if (roomTypes.length === 2) roomTypes = 'Single e Double'; 
-  //   if (roomTypes.length === 3) roomTypes = 'Single, Double e Triple'; 
-  //   setHotelRoomInfo({ capacity: null, roomTypes });
-  // }, [setHotelRoomInfo]);
-
   function handleRoomInfo() {
-    const roomsCapacity = hotelApi?.Rooms.map((room) => room.capacity);
+    const roomsCapacity = roomsData?.Rooms.map((room) => room.capacity);
     roomsCapacity?.sort();
     let roomTypes = [];
     roomsCapacity?.forEach((capacity) => {
@@ -48,14 +26,15 @@ export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }
     setHotelRoomInfo({ capacity: null, roomTypes });
   }
 
-  useEffect(() => {
-    getDataFromApi();
-    setHotelApi(roomsData);
+  useEffect(async() => {
+    if(!roomsData) {
+      await getRooms(hotelData.id);
+    };
   }, []);
 
   useEffect(() => {
     handleRoomInfo();
-  }, [hotelApi]);
+  }, [roomsData]);
 
   console.log(roomsData);  
 
