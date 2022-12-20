@@ -4,8 +4,7 @@ import { IoPersonOutline, IoPerson } from 'react-icons/io5';
 export default function Room({ roomData, selectedRoom, setSelectedRoom }) {
   const roomNumber = roomData.name;
   const roomCapacity = roomData.capacity;
-  //const roomBookings = roomData.Booking.length;
-  const roomBookings = 2;
+  const roomBookings = roomData.Booking.length;
   const isRoomFull = roomBookings>=roomCapacity;
   const capacityArray = [];
   const isSeletec = selectedRoom === roomData.id;
@@ -14,13 +13,13 @@ export default function Room({ roomData, selectedRoom, setSelectedRoom }) {
     for(let i=roomBookings; i<roomCapacity; i++) {
       capacityArray.push('empty');
     };
+    if(isSeletec) {
+      capacityArray.pop();
+      capacityArray.push('selected');
+    };
     for(let i=0; i<roomBookings; i++) {
       capacityArray.push('filled');
     };
-    if(isSeletec) {
-      capacityArray.shift();
-      capacityArray.unshift('selected');
-    }
   };
 
   capacityRender();
@@ -76,6 +75,6 @@ const RoomCapacity = styled.div`
   color: ${ ({ isFull }) => isFull ? '#8C8C8C' : 'black'};
 
   div{
-    color: ${ ({ isSeletec }) => isSeletec ? 'pink' : 'black'};
+    color: ${ ({ isSeletec }) => isSeletec ? '#FF4791' : 'black'};
   }
 `;

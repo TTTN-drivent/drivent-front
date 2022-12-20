@@ -2,9 +2,25 @@ import styled from 'styled-components';
 import Room from './Room';
 import Button from '../Form/Button';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import useSaveBooking from '../../hooks/api/useSaveBooking';
 
 export default function RoomsContainer( { roomsData } ) {
   const [ selectedRoom, setSelectedRoom ] = useState(null);
+  const { saveBookingLoading, saveBooking } = useSaveBooking();
+
+  async function submitBooking() {
+    const body = {
+      roomId: selectedRoom,
+    };
+
+    try {
+      await saveBooking(body);
+      toast('Informações salvas com sucesso!');
+    } catch (err) {
+      toast('Não foi possível salvar suas informações!');
+    }
+  };
 
   return (
     <RoomsWrapper>
@@ -15,7 +31,7 @@ export default function RoomsContainer( { roomsData } ) {
         {roomsData?.map((room) => <Room key={room.id} roomData={room} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>)}
       </RoomsBox>
       {selectedRoom ? (
-        <Button onClick={() => console.log(selectedRoom)}>
+        <Button disabled={saveBookingLoading} onClick={() => submitBooking()}>
         RESERVAR QUARTO
         </Button>
       ) : <></>}
