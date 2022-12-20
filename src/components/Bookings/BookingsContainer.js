@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import Button from '../Form/Button';
-
-import HotelBox from '../HotelsContainer/HotelBox';
+import BookingBox from './BookingBox';
 
 export default function BookingsContainer({ data }) {
   return (
     <Wrapper>
       <h2>Você já escolheu seu quarto:</h2>
       <Container>
-        {data.map((hotel) => <HotelBox key={hotel.id} hotelData={hotel} selectedHotel={true}/>)}
+        <BookingBox userBooking={data.userBooking} roomBookings={data.roomBookings}/>
       </Container>
       <ButtonContainer>
         <Button>
