@@ -1,12 +1,10 @@
 import styled from 'styled-components';
 import Room from './Room';
-import useListRoom from '../../hooks/api/useListRoom';
 import Button from '../Form/Button';
 import { useState } from 'react';
 
-export default function RoomsContainer() {
+export default function RoomsContainer( { roomsData } ) {
   const [ selectedRoom, setSelectedRoom ] = useState(null);
-  const { roomsData } = useListRoom(3);
 
   return (
     <RoomsWrapper>
@@ -14,7 +12,7 @@ export default function RoomsContainer() {
         Ótima pedida! Agora escolha seu quarto:
       </RoomsTitle>
       <RoomsBox>
-        {roomsData?.Rooms.map((room) => <Room key={room.id} roomdata={room} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>)}
+        {roomsData?.map((room) => <Room key={room.id} roomData={room} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>)}
       </RoomsBox>
       {selectedRoom ? (
         <Button onClick={() => console.log(selectedRoom)}>
@@ -27,6 +25,7 @@ export default function RoomsContainer() {
 
 const RoomsWrapper = styled.div `
   margin-top: 50px;
+  margin-bottom: 150px;
 `;
 
 const RoomsTitle = styled.div `

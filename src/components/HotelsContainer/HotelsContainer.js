@@ -6,23 +6,21 @@ import useListRoom from '../../hooks/api/useListRoom';
 
 export default function HotelsContainer({ data }) {
   const [selectedHotel, setSelectedHotel]= useState(null);
-
-  //   const search = async() => {
-  //     if(selectedHotel!==null) {
-  //       const { roomsData } = await useListRoom(selectedHotel.id);
-  //       return roomsData;
-  //     };
-  //   };
-
-  //   useEffect(() => search(), [selectedHotel]);
+  const { roomsData, getRooms } = useListRoom();
+  
+  useEffect(async() => {
+    if(selectedHotel) {
+      await getRooms(selectedHotel.id);
+    }   
+  }, [selectedHotel]);
 
   return (
     <Wrapper>
       <h2>Primeiro, escolha seu hotel</h2>
       <Container>
-        {data.map((hotel) => <HotelBox hotelData={hotel} selectedHotel={selectedHotel} handleSelectHotel={setSelectedHotel}/>)}
+        {data.map((hotel) => <HotelBox key={hotel.id} hotelData={hotel} selectedHotel={selectedHotel} handleSelectHotel={setSelectedHotel}/>)}
       </Container>
-      <RoomsContainer />
+      {roomsData ? <RoomsContainer roomsData={ roomsData.Rooms }/> : <></>}
     </Wrapper>
   );
 }

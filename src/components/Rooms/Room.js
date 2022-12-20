@@ -2,14 +2,14 @@ import styled from 'styled-components';
 import { IoPersonOutline, IoPerson } from 'react-icons/io5';
 import { useState } from 'react';
 
-export default function Room({ roomdata, selectedRoom, setSelectedRoom }) {
-  const roomNumber = roomdata.name;
-  const roomCapacity = roomdata.capacity;
-  //const roomBookings = roomdata.Booking.length;
+export default function Room({ roomData, selectedRoom, setSelectedRoom }) {
+  const roomNumber = roomData.name;
+  const roomCapacity = roomData.capacity;
+  //const roomBookings = roomData.Booking.length;
   const roomBookings = 2;
   const isRoomFull = roomBookings>=roomCapacity;
   const capacityArray = [];
-  const isSeletec = selectedRoom === roomdata.id;
+  const isSeletec = selectedRoom === roomData.id;
 
   function capacityRender() {
     for(let i=roomBookings; i<roomCapacity; i++) {
@@ -22,12 +22,12 @@ export default function Room({ roomdata, selectedRoom, setSelectedRoom }) {
   capacityRender();
 
   return (
-    <RoomWrapper isFull={isRoomFull} isSeletec={isSeletec} onClick={() => setSelectedRoom(roomdata.id)}>
+    <RoomWrapper isFull={isRoomFull} isSeletec={isSeletec} onClick={() => setSelectedRoom(roomData.id)}>
       <RoomNumber>
         {roomNumber}
       </RoomNumber>
       <RoomCapacity isFull={isRoomFull} isSeletec={isSeletec}>
-        {capacityArray.map((booking, index) => booking ?  <div><IoPerson key={index}/></div> : <div><IoPersonOutline key={index}/></div>)}
+        {capacityArray.map((booking, index) => booking ?  <IoPerson key={index}/> : <IoPersonOutline key={index}/>)}
       </RoomCapacity>
     </RoomWrapper>
   );
