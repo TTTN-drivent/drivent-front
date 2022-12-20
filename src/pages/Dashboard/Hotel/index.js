@@ -3,17 +3,22 @@ import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/Hot
 
 import useHotel from '../../../hooks/api/useHotel';
 import HotelsContainer from '../../../components/HotelsContainer/HotelsContainer';
+import useBooking from '../../../hooks/api/useBooking';
+import BookingsContainer from '../../../components/Bookings/BookingsContainer';
 
 export default function Hotel() {
   const { hotelsData, hotelsError } = useHotel();
+  const { booking } = useBooking();
 
   return (
     <Wrapper>
       <h1>Escolha de Quarto e Hotel</h1>
-      {hotelsData === null ? (
-        <HotelPageErrorMessage errorMessage={hotelsError?.message}/>
-      ) : (
-        <HotelsContainer data={hotelsData}/>
+      {booking ? <BookingsContainer data={booking}/> : (
+        hotelsData === null ? (
+          <HotelPageErrorMessage errorMessage={hotelsError?.message}/>
+        ) : (
+          <HotelsContainer data={hotelsData}/>
+        )  
       )}
     </Wrapper>
   );

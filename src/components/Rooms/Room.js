@@ -1,24 +1,27 @@
 import styled from 'styled-components';
 import { IoPersonOutline, IoPerson } from 'react-icons/io5';
-import { useState } from 'react';
 
 export default function Room({ roomData, selectedRoom, setSelectedRoom }) {
   const roomNumber = roomData.name;
   const roomCapacity = roomData.capacity;
-  //const roomBookings = roomData.Booking.length;
-  const roomBookings = 2;
+  const roomBookings = roomData.Booking.length;
   const isRoomFull = roomBookings>=roomCapacity;
   const capacityArray = [];
   const isSeletec = selectedRoom === roomData.id;
 
   function capacityRender() {
     for(let i=roomBookings; i<roomCapacity; i++) {
-      capacityArray.push(false);
+      capacityArray.push('empty');
+    };
+    if(isSeletec) {
+      capacityArray.pop();
+      capacityArray.push('selected');
     };
     for(let i=0; i<roomBookings; i++) {
-      capacityArray.push(true);
+      capacityArray.push('filled');
     };
   };
+
   capacityRender();
 
   return (
@@ -27,7 +30,16 @@ export default function Room({ roomData, selectedRoom, setSelectedRoom }) {
         {roomNumber}
       </RoomNumber>
       <RoomCapacity isFull={isRoomFull} isSeletec={isSeletec}>
-        {capacityArray.map((booking, index) => booking ?  <IoPerson key={index}/> : <IoPersonOutline key={index}/>)}
+        {capacityArray.map((booking, index) => {
+          if(booking === 'empty') {
+            return <IoPersonOutline key={index}/>;
+          } else if (booking === 'filled') {
+            return <IoPerson key={index}/>;
+          } else {
+            return <div key={index}><IoPerson/></div>;
+          }
+        })
+        }
       </RoomCapacity>
     </RoomWrapper>
   );
@@ -61,4 +73,8 @@ const RoomCapacity = styled.div`
   gap: 4px;
   font-size: 22px;
   color: ${ ({ isFull }) => isFull ? '#8C8C8C' : 'black'};
+
+  div{
+    color: ${ ({ isSeletec }) => isSeletec ? '#FF4791' : 'black'};
+  }
 `;

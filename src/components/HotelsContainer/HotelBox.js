@@ -1,63 +1,23 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import useListRoom from '../../hooks/api/useListRoom';
+import handleRoomInfo from './HandleRoomInfo';
 
 export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }) {
   const [hotelRoomInfo, setHotelRoomInfo] = useState(null);
   const { roomsData, getRooms } = useListRoom();
 
-  const getDataFromApi = useCallback(async() => {await getRooms(hotelData.id);}, []);
-
-  const handleRoomInfo = useCallback(() => {
-    const roomsCapacity = roomsData?.Rooms.map((room) => room.capacity);
-    roomsCapacity?.sort();
-    let roomTypes = [];
-    roomsCapacity?.forEach((capacity) => {
-      if (capacity === 1 && !roomTypes.includes('single')) {
-        roomTypes.push('single');
-      } else if (capacity === 2 && !roomTypes.includes('double')) {
-        roomTypes.push('double');
-      } else if (capacity === 3 && !roomTypes.includes('triple')) {
-        roomTypes.push('triple');
-      }
-    });
-    if (roomTypes.length === 1) roomTypes = 'Single';
-    if (roomTypes.length === 2) roomTypes = 'Single e Double'; 
-    if (roomTypes.length === 3) roomTypes = 'Single, Double e Triple'; 
-    setHotelRoomInfo({ capacity: null, roomTypes });
-  }, [setHotelRoomInfo]);
-
-  // function handleRoomInfo() {
-  //   const roomsCapacity = roomsData?.Rooms.map((room) => room.capacity);
-  //   roomsCapacity?.sort();
-  //   let roomTypes = [];
-  //   roomsCapacity?.forEach((capacity) => {
-  //     if (capacity === 1 && !roomTypes.includes('single')) {
-  //       roomTypes.push('single');
-  //     } else if (capacity === 2 && !roomTypes.includes('double')) {
-  //       roomTypes.push('double');
-  //     } else if (capacity === 3 && !roomTypes.includes('triple')) {
-  //       roomTypes.push('triple');
-  //     }
-  //   });
-  //   if (roomTypes.length === 1) roomTypes = 'Single';
-  //   if (roomTypes.length === 2) roomTypes = 'Single e Double'; 
-  //   if (roomTypes.length === 3) roomTypes = 'Single, Double e Triple'; 
-  //   setHotelRoomInfo({ capacity: null, roomTypes });
-  // }
-
-  useEffect(() => {
+  useEffect(async() => {
     if(!roomsData) {
-      getDataFromApi();
-    }
+      await getRooms(hotelData.id);
+    };
   }, []);
 
   useEffect(() => {
-    handleRoomInfo();
+    const roomsInfo = handleRoomInfo(roomsData);
+    setHotelRoomInfo(roomsInfo);
   }, [roomsData]);
-
-  console.log(roomsData);  
 
   return (
     <Hotel selectedHotel={selectedHotel} boxHotel={hotelData} onClick={() => handleSelectHotel(hotelData)}>
@@ -73,7 +33,7 @@ export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }
         <CapacityInfo>
           <h4>Vagas disponíveis:</h4>
           <div>
-            <p>103</p>
+            <p>{hotelRoomInfo?.capacity}</p>
           </div>
         </CapacityInfo>
       </Info>
