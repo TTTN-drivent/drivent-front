@@ -3,22 +3,41 @@ import Room from './Room';
 import Button from '../Form/Button';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import useBooking from '../../hooks/api/useBooking';
 import useSaveBooking from '../../hooks/api/useSaveBooking';
+import useUpdateBooking from '../../hooks/api/useUpdateBooking';
 
-export default function RoomsContainer( { roomsData } ) {
+export default function RoomsContainer( { roomsData, setShowBooking } ) {
   const [ selectedRoom, setSelectedRoom ] = useState(null);
   const { saveBookingLoading, saveBooking } = useSaveBooking();
+  const { updateBookingLoading, updateBooking } = useUpdateBooking();
+  const { booking } = useBooking();
 
   async function submitBooking() {
     const body = {
       roomId: selectedRoom,
     };
 
-    try {
-      await saveBooking(body);
-      toast('Informações salvas com sucesso!');
-    } catch (err) {
-      toast('Não foi possível salvar suas informações!');
+    if(booking) {
+      if(selectedRoom === booking.userBooking.roomId) {
+        toast('Sua reserva já é neste quarto!');
+        return;
+      }
+      try {
+        await updateBooking(booking.userBooking.id, body);
+        toast('Informações alteradas com sucesso!');
+        setShowBooking(true);
+      } catch (err) {
+        toast('Não foi possível alterar suas informações!');
+      }  
+    } else {
+      try {
+        await saveBooking(body);
+        toast('Informações salvas com sucesso!');
+        setShowBooking(true);
+      } catch (err) {
+        toast('Não foi possível salvar suas informações!');
+      }
     }
   };
 
@@ -31,7 +50,7 @@ export default function RoomsContainer( { roomsData } ) {
         {roomsData?.map((room) => <Room key={room.id} roomData={room} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}/>)}
       </RoomsBox>
       {selectedRoom ? (
-        <Button disabled={saveBookingLoading} onClick={() => submitBooking()}>
+        <Button disabled={saveBookingLoading || updateBookingLoading} onClick={() => submitBooking()}>
         RESERVAR QUARTO
         </Button>
       ) : <></>}

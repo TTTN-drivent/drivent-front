@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export default function BookingBox({ userBooking, roomBookings }) {
   const [roomType, setRoomType] = useState(null);
-  const [bookings, setBookings] = useState(null);
+  const [bookingsNumber, setBookingsNumber] = useState(null);
 
   function makeRoomTypes() {
     if(userBooking.Room.capacity === 1) {
@@ -18,9 +18,9 @@ export default function BookingBox({ userBooking, roomBookings }) {
 
   function makeRoomBookings() {
     if(roomBookings.length === 1) {
-      setBookings('Somente você');
+      setBookingsNumber('Somente você');
     } else {
-      setBookings(`Você e mais ${roomBookings.length-1} pessoas`);
+      setBookingsNumber(`Você e mais ${roomBookings.length-1} pessoas`);
     }
   };
 
@@ -45,7 +45,7 @@ export default function BookingBox({ userBooking, roomBookings }) {
         <CapacityInfo>
           <h4>Pessoas no seu quarto</h4>
           <div>
-            <p>{bookings}</p>
+            <p>{bookingsNumber}</p>
           </div>
         </CapacityInfo>
       </Info>
