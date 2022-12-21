@@ -10,9 +10,11 @@ import 'react-credit-cards/es/styles-compiled.css';
 import { useForm } from '../../hooks/useForm';
 import useSavePayment from '../../hooks/api/useSavePayment';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function CardInformationForm({ ticketId, setPaymentDone }) {
   const { savePaymentLoading, savePayment } = useSavePayment();
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -41,6 +43,7 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
         await savePayment(newData);
         setPaymentDone(true);
         toast('Pagamento efetuado com sucesso!');
+        navigate('/dashboard/hotel');
       } catch (err) {
         toast('Não foi possível processar o pagamento!');
       }
