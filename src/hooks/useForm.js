@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 export const useForm = (options) => {
   const [data, setData] = useState(options?.initialValues || {});
+  const [focused, setFocused] = useState('');
   const [errors, setErrors] = useState({});
 
   const handleChange = (key, sanitizeFn) => (e) => {
@@ -61,12 +62,23 @@ export const useForm = (options) => {
     }
   };
 
+  const handleFocus = (key) => (e) => {
+    setFocused(e.target.name);
+  };
+
+  const handleBlur = (key) => (e) => {
+    setFocused('');
+  };
+
   return {
     setData,
     data,
     handleChange,
     customHandleChange,
     handleSubmit,
+    handleFocus,
+    focused,
+    handleBlur,
     errors,
   };
 };
