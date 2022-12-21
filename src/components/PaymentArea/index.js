@@ -3,29 +3,28 @@ import Typography from '@material-ui/core/Typography';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
 import { useEffect, useState } from 'react';
-import CardInformationForm from '../../../components/CardInformationForm';
+import CardInformationForm from '../CardInformationForm';
 
 export default function PaymentArea({ ticket }) {
   const [module, setModule] = useState('');
   const [paymentDone, setPaymentDone] = useState(false);
 
   useEffect(() => {
-    if (ticket?.isRemote) {
+    if (ticket?.TicketType?.isRemote) {
       setModule('Online');
-    } else if (!ticket?.includesHotel) {
+    } else if (!ticket?.TicketType?.includesHotel) {
       setModule('Presencial + Sem Hotel');
     } else {
       setModule('Presencial + Com Hotel');
     }
 
     if (ticket?.status === 'PAID') {
-      setPaymentDone(false);
+      setPaymentDone(true);
     }
   }, []);
 
   return (
     <>
-      <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       <StyledSubtitle variant="h6">Ingresso escolhido</StyledSubtitle>
       <PaymentCheckBox>
         <Typography variant='body1'>{module}</Typography>
@@ -61,10 +60,6 @@ const PaymentDoneContainer = styled.div`
     font-size: 0.9rem;
     line-height: 19px;
   }
-`;
-
-const StyledTypography = styled(Typography)`
-  margin-bottom: 37px!important;
 `;
 
 const StyledSubtitle = styled(Typography)`
