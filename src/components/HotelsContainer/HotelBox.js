@@ -1,21 +1,23 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import useListRoom from '../../hooks/api/useListRoom';
-import handleRoomInfo from './HandleRoomInfo';
+import getRoomsInfo from './getRoomsInfo';
 
 export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }) {
   const [hotelRoomInfo, setHotelRoomInfo] = useState(null);
   const { roomsData, getRooms } = useListRoom();
 
+  const gtRoomDataFromApi = useCallback(async() => await getRooms(hotelData.id));
+
   useEffect(async() => {
     if(!roomsData) {
-      await getRooms(hotelData.id);
+      gtRoomDataFromApi();
     };
   }, []);
 
   useEffect(() => {
-    const roomsInfo = handleRoomInfo(roomsData);
+    const roomsInfo = getRoomsInfo(roomsData);
+    console.log(roomsInfo);
     setHotelRoomInfo(roomsInfo);
   }, [roomsData]);
 
@@ -33,7 +35,7 @@ export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }
         <CapacityInfo>
           <h4>Vagas disponíveis:</h4>
           <div>
-            <p>{hotelRoomInfo?.capacity}</p>
+            <p>{hotelRoomInfo?.availableBookings}</p>
           </div>
         </CapacityInfo>
       </Info>
