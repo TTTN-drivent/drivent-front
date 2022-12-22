@@ -1,39 +1,51 @@
-import { useState } from 'react';
 import { useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import useListRoom from '../../hooks/api/useListRoom';
-import getRoomsInfo from './getRoomsInfo';
 
-export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }) {
-  const [hotelRoomInfo, setHotelRoomInfo] = useState(null);
-  const { roomsData, getRooms } = useListRoom();
+export default function BookingBox({ bookingData }) {
+  const [roomType, setRoomType] = useState(null);
+  const [bookingsNumber, setBookingsNumber] = useState(null);
 
-  useEffect(async() => {
-    if(!roomsData) {
-      await getRooms(hotelData.id);
+  function makeRoomTypes() {
+    if(bookingData.Room.capacity === 1) {
+      setRoomType('(Single)');
+    } else if (bookingData.Room.capacity === 2) {
+      setRoomType('(Double)');
+    } else {
+      setRoomType('(Triple)');
     };
-  }, []);
+  };
 
-  useEffect(() => {
-    const roomsInfo = getRoomsInfo(roomsData);
-    setHotelRoomInfo(roomsInfo);
-  }, [roomsData]);
+  function makeRoomBookings() {
+    if(bookingData.Room.roomBookings === 1) {
+      setBookingsNumber('Somente você');
+    } else {
+      setBookingsNumber(`Você e mais ${bookingData.Room.roomBookings-1} pessoas`);
+    }
+  };
 
+  useEffect( () => {
+    if(bookingData) {
+      makeRoomTypes();
+      makeRoomBookings();
+    };
+  }, [bookingData]);
+  
   return (
-    <Hotel selectedHotel={selectedHotel} boxHotel={hotelData} onClick={() => handleSelectHotel(hotelData)}>
-      <img alt="hotelPic" src={hotelData.image} />
+    <Hotel>
+      <img alt="hotelPic" src={bookingData.Hotel.image} />
       <Info>
-        <h3>{hotelData.name}</h3>
+        <h3>{bookingData.Hotel.name}</h3>
         <RoomTypeInfo>
-          <h4>Tipos de acomodação:</h4>
+          <h4>Quarto reservado</h4>
           <div>
-            <p>{hotelRoomInfo?.roomTypes}</p>
+            <p>{bookingData.Room.name} {roomType}</p>
           </div>
         </RoomTypeInfo>
         <CapacityInfo>
-          <h4>Vagas disponíveis:</h4>
+          <h4>Pessoas no seu quarto</h4>
           <div>
-            <p>{hotelRoomInfo?.availableBookings}</p>
+            <p>{bookingsNumber}</p>
           </div>
         </CapacityInfo>
       </Info>
@@ -45,16 +57,15 @@ const Hotel = styled.div`
   background-color: red;
   width: 195px;
   height: 265px;
-  background-color: ${({ selectedHotel, boxHotel }) => (selectedHotel?.id === boxHotel.id ? '#FFEED2' : '#EBEBEB')};
+  background-color: #FFEED2;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 10px;
-  cursor: pointer;
   > img {
-    height: 45%;
+    height: 100%;
     width: 100%;
     border-radius: 5px;
     margin-bottom: 10px;

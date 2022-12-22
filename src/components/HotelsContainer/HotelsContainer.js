@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import RoomsContainer from '../Rooms/RoomsContainer';
 import useListRoom from '../../hooks/api/useListRoom';
 
-export default function HotelsContainer({ data }) {
+export default function HotelsContainer({ data, setShowBooking }) {
   const [selectedHotel, setSelectedHotel]= useState(null);
   const { roomsData, getRooms } = useListRoom();
   
@@ -20,7 +20,7 @@ export default function HotelsContainer({ data }) {
       <Container>
         {data.map((hotel) => <HotelBox key={hotel.id} hotelData={hotel} selectedHotel={selectedHotel} handleSelectHotel={setSelectedHotel}/>)}
       </Container>
-      {roomsData ? <RoomsContainer roomsData={ roomsData.Rooms }/> : <></>}
+      {roomsData ? <RoomsContainer roomsData={roomsData.Rooms} setShowBooking={setShowBooking}/> : <></>}
     </Wrapper>
   );
 }
