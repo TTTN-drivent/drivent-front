@@ -20,7 +20,28 @@ function getRoomTypes(roomsCapacity) {
       roomTypes.push('triple');
     }
   });
-  if (!roomTypes.includes('triple') && !roomTypes.includes('double')) return 'Single';
-  if (!roomTypes.includes('triple')) return 'Single e Double'; 
-  return 'Single, Double e Triple';
+
+  if(roomTypes.includes('single')) {
+    if(roomTypes.includes('double')) {
+      if(roomTypes.includes('triple')) {
+        return 'Single, Double e Triple';
+      };
+      return 'Single e Double';
+    };
+    if(roomTypes.includes('triple')) {
+      return 'Single e Triple';
+    };
+    return 'Simple';
+  };
+
+  if(roomTypes.includes('double')) {
+    if(roomTypes.includes('triple')) {
+      return 'Double e Triple';
+    };
+    return 'Double';
+  };
+
+  if(roomTypes.includes('triple')) {
+    return 'Triple';
+  };
 }
