@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Typography } from '@material-ui/core';
 import PaymentArea from '../../../components/PaymentArea';
+import TicketPageErrorMessage from '../../../components/CreateTicket/TicketPageErrorMessage';
 
 export default function Payment() {
-  const { getTickets } = useTicket();
+  const { getTickets, ticketError } = useTicket();
+  // console.log(ticketError);
   const [ refresh, setRefresh ] = useState(false);
   const [ ticket, setTicket ] = useState(null);
 
@@ -22,9 +24,12 @@ export default function Payment() {
     <>
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       {
-        !ticket ?
-          <CreateTicket setRefresh={setRefresh}/> :
-          <PaymentArea ticket={ticket} />
+        String(ticketError)?.slice(-3) === '403' ?
+          (<TicketPageErrorMessage/>) : (
+            !ticket ?
+              <CreateTicket setRefresh={setRefresh}/> :
+              <PaymentArea ticket={ticket} />
+          )
       }
     </>
   );
