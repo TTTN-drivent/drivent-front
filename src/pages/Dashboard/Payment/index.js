@@ -7,7 +7,8 @@ import PaymentArea from '../../../components/PaymentArea';
 
 export default function Payment() {
   const { getTickets } = useTicket();
-  const [ticket, setTicket] = useState(null);
+  const [ refresh, setRefresh ] = useState(false);
+  const [ ticket, setTicket ] = useState(null);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -15,14 +16,14 @@ export default function Payment() {
       setTicket(ticketData);
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
   return (
     <>
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       {
         !ticket ?
-          <CreateTicket setTicket={setTicket} /> :
+          <CreateTicket setRefresh={setRefresh}/> :
           <PaymentArea ticket={ticket} />
       }
     </>

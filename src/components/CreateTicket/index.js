@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useTicketType from '../../hooks/api/useTicketTypes';
 import { sortFirstTicketTypes, sortHotelsTicketTypes } from './sortTicketTypes';
 import BoxModality from './BoxModality';
 import HostingModalitityComponent from './HostingModalityComponent';
-import useSaveTicket from '../../hooks/api/useSaveTicket';
+import ConfirmTicket from './ConfirmTicket';
 
-export default function CreateTicket({ setTicket }) {
+export default function CreateTicket({ setRefresh }) {
   const [checkedModality, setCheckedModality] = useState({});
   const { ticketType } = useTicketType();
-  const { saveTicket } = useSaveTicket();
   const firstTicketTypes = sortFirstTicketTypes(ticketType);
   const hotelsTicketTypes = sortHotelsTicketTypes(ticketType);
 
@@ -42,27 +41,13 @@ export default function CreateTicket({ setTicket }) {
       {checkedModality.name === 'Presencial' ? (
         <HostingModalitityComponent
           hotelsTicketTypes={hotelsTicketTypes}
-          setTicket={setTicket}
+          setRefresh={setRefresh}
         />
       ) : checkedModality.name === 'Online' ? (
-        <StyledOnline>
-          <h2>
-            Fechado! O total ficou em <strong>R$ {checkedModality.price / 100}</strong>. Agora é só confirmar:
-          </h2>
-          <button
-            onClick={async() => {
-              try {
-                const result = await saveTicket({ ticketTypeId: checkedModality.id });
-                toast('Seu ticket foi reservado com sucesso!');
-                setTicket(result.data);
-              } catch (error) {
-                toast('Não foi possível reservar seu ticket!');
-              }
-            }}
-          >
-            RESERVAR INGRESSO
-          </button>
-        </StyledOnline>
+        <ConfirmTicket
+          modality={checkedModality}
+          setRefresh={setRefresh}
+        />
       ) : (
         null
       )}
@@ -116,36 +101,5 @@ const StyledModalidade = styled.div`
     line-height: 16px;
     text-align: center;
     color: #898989;
-  }
-`;
-
-const StyledOnline = styled.div`
-  h2 {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 23px;
-    color: #8e8e8e;
-    margin-top: 44px;
-    margin-bottom: 17px;
-  }
-
-  button {
-    width: 162px;
-    height: 37px;
-    background: #e0e0e0;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    cursor: pointer;
-
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    text-align: center;
-
-    color: #000000;
   }
 `;
