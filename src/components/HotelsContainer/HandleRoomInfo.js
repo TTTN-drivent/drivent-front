@@ -31,7 +31,7 @@ function getRoomTypes(roomsCapacity) {
     if(roomTypes.includes('triple')) {
       return 'Single e Triple';
     };
-    return 'Simple';
+    return 'Single';
   };
 
   if(roomTypes.includes('double')) {
