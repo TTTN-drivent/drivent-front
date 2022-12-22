@@ -1,8 +1,8 @@
 const validations = {
-  cardNumber: {
+  number: {
     custom: {
-      isValid: (value) => parseInt(value?.replaceAll('.', '')?.replace('-', '')?.length, 10) === 16,
-      message: 'Digite um número de cartão válido',
+      isValid: (value) => parseInt(value.replaceAll(' ', '')?.length, 10) === 16,
+      message: 'Número de cartão inválido',
     },
   },
 
@@ -13,17 +13,17 @@ const validations = {
     },
   },
 
-  expirationDate: {
+  expiry: {
     custom: {
-      isValid: (value) => !value || !isNaN(new Date(value?.split('-').join('-'))),
-      message: 'Digite uma data de validade válida',
+      isValid: (value) => expiryValidation(value),
+      message: 'Digite uma data válida',
     },
   },
 
   cvc: {
     custom: {
       isValid: (value) => parseInt(value?.length, 10) === 3,
-      message: 'Digite um número cvc válido',
+      message: 'CVC  inválido',
     },
   }
 };
@@ -32,4 +32,16 @@ export default validations;
 
 function isValidString(value) {
   return value || value?.trim();
+}
+
+function expiryValidation(value) {
+  const numbers = value?.replace('/', '');
+  if(numbers?.length === 4) {
+    const month = Math.floor(parseInt(numbers, 10) / 100);
+    if(month >=1 && month <= 12) {
+      return parseInt(numbers, 10) % 100 > 22;
+    }
+    return false;
+  }
+  return false;
 }
