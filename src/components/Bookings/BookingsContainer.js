@@ -11,7 +11,7 @@ export default function BookingsContainer({ setShowBooking }) {
       <Wrapper>
         <h2>Você já escolheu seu quarto:</h2>
         <Container>
-          <BookingBox userBooking={booking.userBooking} roomBookings={booking.roomBookings}/>
+          <BookingBox bookingData={booking}/>
         </Container>
         <ButtonContainer>
           <Button onClick={() => setShowBooking(false)}>

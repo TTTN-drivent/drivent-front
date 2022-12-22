@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function BookingBox({ userBooking, roomBookings }) {
+export default function BookingBox({ bookingData }) {
   const [roomType, setRoomType] = useState(null);
   const [bookingsNumber, setBookingsNumber] = useState(null);
 
   function makeRoomTypes() {
-    if(userBooking.Room.capacity === 1) {
+    if(bookingData.Room.capacity === 1) {
       setRoomType('(Single)');
-    } else if (userBooking.Room.capacity === 2) {
+    } else if (bookingData.Room.capacity === 2) {
       setRoomType('(Double)');
     } else {
       setRoomType('(Triple)');
@@ -17,29 +17,29 @@ export default function BookingBox({ userBooking, roomBookings }) {
   };
 
   function makeRoomBookings() {
-    if(roomBookings.length === 1) {
+    if(bookingData.Room.roomBookings === 1) {
       setBookingsNumber('Somente você');
     } else {
-      setBookingsNumber(`Você e mais ${roomBookings.length-1} pessoas`);
+      setBookingsNumber(`Você e mais ${bookingData.Room.roomBookings-1} pessoas`);
     }
   };
 
   useEffect( () => {
-    if(userBooking && roomBookings) {
+    if(bookingData) {
       makeRoomTypes();
       makeRoomBookings();
     };
-  }, [userBooking, roomBookings]);
+  }, [bookingData]);
   
   return (
     <Hotel>
-      <img alt="hotelPic" src={userBooking.Room.Hotel.image} />
+      <img alt="hotelPic" src={bookingData.Hotel.image} />
       <Info>
-        <h3>{userBooking.Room.Hotel.name}</h3>
+        <h3>{bookingData.Hotel.name}</h3>
         <RoomTypeInfo>
           <h4>Quarto reservado</h4>
           <div>
-            <p>{userBooking.Room.name} {roomType}</p>
+            <p>{bookingData.Room.name} {roomType}</p>
           </div>
         </RoomTypeInfo>
         <CapacityInfo>

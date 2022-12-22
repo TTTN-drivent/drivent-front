@@ -19,12 +19,12 @@ export default function RoomsContainer( { roomsData, setShowBooking } ) {
     };
 
     if(booking) {
-      if(selectedRoom === booking.userBooking.roomId) {
+      if(selectedRoom === booking.Booking.roomId) {
         toast('Sua reserva já é neste quarto!');
         return;
       }
       try {
-        await updateBooking(booking.userBooking.id, body);
+        await updateBooking(booking.Booking.id, body);
         toast('Informações alteradas com sucesso!');
         setShowBooking(true);
       } catch (err) {
