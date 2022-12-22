@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BoxModality from './BoxModality';
-import BoxHospedagem from './BoxHospedagem';
+import ConfirmTicket from './ConfirmTicket';
 
-export default function HostingModalitityComponent({ hotelsTicketTypes, setTicket }) {
+export default function HostingModalitityComponent({ hotelsTicketTypes, setRefresh }) {
   const [checkedHosting, setCheckedHosting] = useState({});
 
   return (
@@ -34,9 +34,9 @@ export default function HostingModalitityComponent({ hotelsTicketTypes, setTicke
       </StyledModalidade>
 
       {checkedHosting.name ?
-        <BoxHospedagem
-          checkedHosting={checkedHosting}
-          setTicket={setTicket}
+        <ConfirmTicket
+          modality={checkedHosting}
+          setRefresh={setRefresh}
         /> :
         <></>
       }
