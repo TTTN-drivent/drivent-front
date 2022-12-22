@@ -10,29 +10,28 @@ import 'react-credit-cards/es/styles-compiled.css';
 import { useForm } from '../../hooks/useForm';
 import useSavePayment from '../../hooks/api/useSavePayment';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 export default function CardInformationForm({ ticketId, setPaymentDone }) {
   const { savePaymentLoading, savePayment } = useSavePayment();
-  const navigate = useNavigate();
 
   const {
     handleSubmit,
     handleChange,
     handleFocus,
     handleBlur,
+    handleCallback,
     focused,
     data,
     errors
   } = useForm({
-    // validations: FormValidation,
+    validations: FormValidation,
 
     onSubmit: async(data) => {
       const newData = {
         ticketId: ticketId,
         cardData: {
           issuer: data.issuer,
-          number: data.number,
+          number: data.number.replaceAll(' ', ''),
           name: data.name,
           expirationDate: data.expiry,
           cvv: data.cvc
@@ -40,10 +39,13 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
       };
 
       try {
+        if(!data.issuer) {
+          toast('Cartão inválido!');
+          return;
+        }
         await savePayment(newData);
         setPaymentDone(true);
         toast('Pagamento efetuado com sucesso!');
-        navigate('/dashboard/hotel');
       } catch (err) {
         toast('Não foi possível processar o pagamento!');
       }
@@ -63,12 +65,12 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
       <form onSubmit={handleSubmit} onBlur={handleBlur()}>
         <InnerContainer>          
           <Cards
-            number={data?.number}
+            number={data?.number.replaceAll(' ', '')}
             name={data?.name}
             expiry={data?.expiry}
             cvc={data?.cvc}
             focused={focused}
-
+            callback={handleCallback}
           />
           <FormContainer>
             <InputWrapper>
@@ -77,9 +79,8 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
                 name="number"
                 type="text"
                 size='small'
-                // pattern='[\d| ]{16,22}'
-                maxLength='19'
-                // mask='9999.9999.9999.9999'
+                maxLength="19"
+                mask='9999 9999 9999 9999'
                 required
                 value={data?.number || ''}
                 onChange={handleChange('number')}
@@ -94,7 +95,6 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
                 name="name"
                 type="text"
                 size='small'
-                pattern='[a-z A-Z-]+'
                 required
                 value={data?.name || ''}
                 onChange={handleChange('name')}
@@ -109,9 +109,8 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
                   name="expiry"
                   type="text"
                   size='small'
-                  // format="MM-yy"
-                  pattern='\d\d/\d\d'
-                  maxLength='4'
+                  mask="99/99"
+                  maxLength='5'
                   required
                   value={data?.expiry || ''}
                   onChange={handleChange('expiry')}
@@ -125,12 +124,12 @@ export default function CardInformationForm({ ticketId, setPaymentDone }) {
                   name="cvc"
                   type="text"
                   size='small'
+                  mask='999'
+                  maxLength="3"
                   required
                   value={data?.cvc || ''}
                   onChange={handleChange('cvc')}
                   onFocus={handleFocus()}
-                  maxLength="3"
-                  pattern='\d{3}'
                 />
                 {errors.cvc && <ErrorMsg>{errors.cvc}</ErrorMsg>}
               </InputWrapper>

@@ -70,6 +70,14 @@ export const useForm = (options) => {
     setFocused('');
   };
 
+  const handleCallback = ({ issuer }, isValid) => {
+    const issuerName = isValid ? issuer : '';
+    setData({
+      ...data,
+      issuer: issuerName
+    });
+  };
+
   return {
     setData,
     data,
@@ -79,6 +87,7 @@ export const useForm = (options) => {
     handleFocus,
     focused,
     handleBlur,
+    handleCallback,
     errors,
   };
 };
