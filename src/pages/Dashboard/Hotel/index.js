@@ -5,19 +5,31 @@ import useHotel from '../../../hooks/api/useHotel';
 import HotelsContainer from '../../../components/HotelsContainer/HotelsContainer';
 import useBooking from '../../../hooks/api/useBooking';
 import BookingsContainer from '../../../components/Bookings/BookingsContainer';
+import { useState, useEffect } from 'react';
 
 export default function Hotel() {
   const { hotelsData, hotelsError } = useHotel();
   const { booking } = useBooking();
+  const [ showBooking, setShowBooking ] = useState(false);
+  
+  useEffect(() => {
+    if(booking) {
+      setShowBooking(true);
+    } else {
+      setShowBooking(false);
+    }
+  }, [booking]);
 
   return (
     <Wrapper>
       <h1>Escolha de Quarto e Hotel</h1>
-      {booking ? <BookingsContainer data={booking}/> : (
+      {showBooking ? (
+        <BookingsContainer setShowBooking={setShowBooking}/>
+      ) : (  
         hotelsData === null ? (
           <HotelPageErrorMessage errorMessage={hotelsError?.message}/>
         ) : (
-          <HotelsContainer data={hotelsData}/>
+          <HotelsContainer data={hotelsData} setShowBooking={setShowBooking}/>
         )  
       )}
     </Wrapper>

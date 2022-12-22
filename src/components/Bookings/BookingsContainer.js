@@ -1,21 +1,25 @@
 import styled from 'styled-components';
+import useBooking from '../../hooks/api/useBooking';
 import Button from '../Form/Button';
+import BookingBox from './BookingBox';
 
-import HotelBox from '../HotelsContainer/HotelBox';
+export default function BookingsContainer({ setShowBooking }) {
+  const { booking } = useBooking();
 
-export default function BookingsContainer({ data }) {
   return (
-    <Wrapper>
-      <h2>Você já escolheu seu quarto:</h2>
-      <Container>
-        {data.map((hotel) => <HotelBox key={hotel.id} hotelData={hotel} selectedHotel={true}/>)}
-      </Container>
-      <ButtonContainer>
-        <Button>
-          TROCAR DE QUARTO
-        </Button>
-      </ButtonContainer>
-    </Wrapper>
+    booking ? (
+      <Wrapper>
+        <h2>Você já escolheu seu quarto:</h2>
+        <Container>
+          <BookingBox bookingData={booking}/>
+        </Container>
+        <ButtonContainer>
+          <Button onClick={() => setShowBooking(false)}>
+            TROCAR DE QUARTO
+          </Button>
+        </ButtonContainer>
+      </Wrapper>
+    ) : ( <> </>)
   );
 }
 
