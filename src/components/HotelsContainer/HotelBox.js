@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import useListRoom from '../../hooks/api/useListRoom';
-import handleRoomInfo from './HandleRoomInfo';
+import getRoomsInfo from './getRoomsInfo';
 
 export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }) {
   const [hotelRoomInfo, setHotelRoomInfo] = useState(null);
@@ -15,7 +15,7 @@ export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }
   }, []);
 
   useEffect(() => {
-    const roomsInfo = handleRoomInfo(roomsData);
+    const roomsInfo = getRoomsInfo(roomsData);
     setHotelRoomInfo(roomsInfo);
   }, [roomsData]);
 
@@ -33,7 +33,7 @@ export default function HotelBox({ hotelData, selectedHotel, handleSelectHotel }
         <CapacityInfo>
           <h4>Vagas disponíveis:</h4>
           <div>
-            <p>{hotelRoomInfo?.capacity}</p>
+            <p>{hotelRoomInfo?.availableBookings}</p>
           </div>
         </CapacityInfo>
       </Info>
