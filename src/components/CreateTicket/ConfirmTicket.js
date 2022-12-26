@@ -37,7 +37,6 @@ const StyledOnline = styled.div`
     font-size: 20px;
     line-height: 23px;
     color: #8e8e8e;
-    margin-top: 44px;
     margin-bottom: 17px;
   }
 `;
