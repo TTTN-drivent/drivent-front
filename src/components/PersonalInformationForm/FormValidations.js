@@ -1,3 +1,5 @@
+import { isValidCPF, isValidCEP, isValidLandlinePhone, isValidMobilePhone, isValidPhone } from '@brazilian-utils/brazilian-utils';
+
 const validations = {
   name: {
     custom: {
@@ -8,21 +10,21 @@ const validations = {
 
   cpf: {
     custom: {
-      isValid: (value) => parseInt(value?.replaceAll('.', '')?.replace('-', '')?.length, 10) === 11,
+      isValid: (value) => isValidCPF(value?.replace('-', '')),
       message: 'Digite um CPF válido',
     },
   },
 
   phone: {
     custom: {
-      isValid: (value) => parseInt(value?.length, 10) >= 13,
+      isValid: (value) => isValidPhones(value),
       message: 'Digite um telefone válido',
     },
   },
 
   cep: {
     custom: {
-      isValid: (value) => parseInt(value?.length, 10) === 9,
+      isValid: (value) => isValidCEP(value?.replaceAll('.', '')?.replace('-', '')),
       message: 'Digite um CEP válido',
     },
   },
@@ -57,7 +59,7 @@ const validations = {
 
   birthday: {
     custom: {
-      isValid: (value) => !value || !isNaN(new Date(value?.split('-').join('-'))),
+      isValid: (value) => value || !isNaN(new Date(value?.split('-').join('-'))),
       message: 'Selecione uma data de aniversário',
     },
   },
@@ -74,4 +76,9 @@ export default validations;
 
 function isValidString(value) {
   return value || value?.trim();
+}
+
+function isValidPhones(value) {
+  const phone = value?.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replaceAll('-', '');
+  return isValidPhone(phone) || isValidMobilePhone(phone) || isValidLandlinePhone(phone);
 }
