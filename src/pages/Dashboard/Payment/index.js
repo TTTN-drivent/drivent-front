@@ -8,7 +8,6 @@ import TicketPageErrorMessage from '../../../components/CreateTicket/TicketPageE
 
 export default function Payment() {
   const { getTickets, ticketError } = useTicket();
-  // console.log(ticketError);
   const [ refresh, setRefresh ] = useState(false);
   const [ ticket, setTicket ] = useState(null);
 
