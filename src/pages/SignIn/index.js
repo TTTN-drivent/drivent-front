@@ -13,6 +13,8 @@ import EventInfoContext from '../../contexts/EventInfoContext';
 import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
+import styled from 'styled-components';
+import imggithub from '../../assets/images/github.png';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -24,7 +26,7 @@ export default function SignIn() {
   const { setUserData } = useContext(UserContext);
 
   const navigate = useNavigate();
-  
+
   async function submit(event) {
     event.preventDefault();
 
@@ -36,7 +38,7 @@ export default function SignIn() {
     } catch (err) {
       toast('Não foi possível fazer o login!');
     }
-  } 
+  }
 
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
@@ -47,10 +49,24 @@ export default function SignIn() {
       <Row>
         <Label>Entrar</Label>
         <form onSubmit={submit}>
-          <Input label="E-mail" type="text" fullWidth value={email} onChange={e => setEmail(e.target.value)} />
-          <Input label="Senha" type="password" fullWidth value={password} onChange={e => setPassword(e.target.value)} />
-          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>Entrar</Button>
+          <Input label="E-mail" type="text" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            label="Senha"
+            type="password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit" color="primary" fullWidth disabled={loadingSignIn}>
+            Entrar
+          </Button>
         </form>
+      </Row>
+      <Row>
+        <StyledButtonGitHub>
+          <img src={imggithub} />
+          Login Com GitHub
+        </StyledButtonGitHub>
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
@@ -58,3 +74,23 @@ export default function SignIn() {
     </AuthLayout>
   );
 }
+
+const StyledButtonGitHub = styled.button`
+  background-color: #262626;
+  color: white;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+
+  img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+`;
