@@ -65,7 +65,8 @@ const Hotel = styled.div`
   align-items: center;
   padding: 10px;
   > img {
-    height: 100%;
+    height: 110px;
+    object-fit: cover;
     width: 100%;
     border-radius: 5px;
     margin-bottom: 10px;
