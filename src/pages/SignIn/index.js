@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import qs from 'query-string';
 
 import AuthLayout from '../../layouts/Auth';
 
@@ -40,6 +42,19 @@ export default function SignIn() {
     }
   }
 
+  async function redirectToGitHub() {
+    const GITHUB_URL = 'https://github.com/login/oauth/authorize';
+    const params = {
+      response_type: 'code',
+      scope: 'user',
+      client_id: process.env.REACT_APP_CLIENT_ID,
+      redirect_uri: process.env.REACT_APP_REDIRECT_URL,
+    };
+    const queryString = qs.stringify(params);
+    const authURL = `${GITHUB_URL}?${queryString}`;
+    window.location.href = authURL;
+  }
+
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
@@ -63,7 +78,7 @@ export default function SignIn() {
         </form>
       </Row>
       <Row>
-        <StyledButtonGitHub>
+        <StyledButtonGitHub onClick={() => redirectToGitHub()}>
           <img src={imggithub} />
           Login Com GitHub
         </StyledButtonGitHub>
