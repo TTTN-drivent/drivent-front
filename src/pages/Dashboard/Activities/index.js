@@ -1,8 +1,21 @@
 import { Typography } from '@material-ui/core';
 import { useState } from 'react';
 import styled from 'styled-components';
+
 import Button from '../../../components/Form/Button';
+import useActivity from '../../../hooks/api/useActivity';
 import useActivityDates from '../../../hooks/api/useActivityDates';
+
+//Componente só para exemplificar (RETIRAR DEPOIS)
+function ActivityList({ selectedDate }) {
+  const { activity } = useActivity(selectedDate.id);
+
+  return (
+    < >
+      {activity?.map((value) => <div key={value.id}>{value.name}</div>)}
+    </>
+  );
+}
 
 export default function Activities() {
   const [selectedDate, setSelectedDate] = useState();
@@ -24,13 +37,19 @@ export default function Activities() {
               {dates?.map((date) =>
                 <DateButton
                   key={date.id}
-                  variant='contained'
-                  onClick={() => { setSelectedDate({ ...date }); }}
-                  selectedDate={selectedDate}
                   value={date.id}
+                  props={selectedDate}
+                  onClick={() => {
+                    setSelectedDate({ ...date });
+                  }}
                 >{date.date}</DateButton>
               )}
             </DateMenu>
+            {
+              selectedDate ?
+                <ActivityList selectedDate={selectedDate} /> :
+                null
+            }
           </>
       }
     </>
@@ -51,8 +70,9 @@ const DateMenu = styled.div`
 `;
 
 const DateButton = styled(Button)`
-  width: 131px;
-  height: 37px;
+  width: 140px;
+  height: 40px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25) !important;
-  background: ${({ selectedDate, value }) => (selectedDate?.id === value ? '#FFD37D' : 'default')} !important;
+  background: ${({ props, value }) => (props?.id === value ? '#FFD37D' : 'default')} !important;
+  text-transform: none !important;
 `;
