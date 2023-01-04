@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
-export default function HotelPageErrorMessage({ errorMessage }) {
+export default function ActivitiesPageErrorMessage({ errorMessage }) {
   const errorStatus = errorMessage?.slice(-3);
 
   return (
     <Wrapper>
       {errorStatus === '403' ? (
-        <h2>Sua modalidade de ingresso não inclui hospedagem. Prossiga para a escolha de atividades</h2>
+        <h2>Sua modalidade de ingresso não necessita escolher atividade. Você terá acesso a todas as atividades.</h2>
       ) : (
-        <h2>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</h2>
+        <h2>Você precisa ter confirmado pagamento antes de fazer a escolha de atividades</h2>
       )}
     </Wrapper>
   );

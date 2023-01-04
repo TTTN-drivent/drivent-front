@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import HotelPageErrorMessage from '../../../components/HotelPageErrorMessage/HotelPageErrorMessage';
-
 import useHotel from '../../../hooks/api/useHotel';
 import HotelsContainer from '../../../components/HotelsContainer/HotelsContainer';
 import useBooking from '../../../hooks/api/useBooking';
