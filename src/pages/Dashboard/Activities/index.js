@@ -1,19 +1,22 @@
+import { Typography } from '@material-ui/core';
 import styled from 'styled-components';
+
+import useActivityDates from '../../../hooks/api/useActivityDates';
 import ActivitiesPageErrorMessage from '../../../components/ActivitiesPageErrorMessage/ActivitiesPageErrorMessage';
-import useActivities from '../../../hooks/api/useActivities';
+import ActivitiesContainer from '../../../components/ActivitiesContainer';
 
 export default function Activities() {
-  const { activitiesData, activitiesError } = useActivities();
-  
+  const { dates, dateError } = useActivityDates();
+
   return (
     <Wrapper>
-      <h1>Escolha de atividades</h1>
+      <StyledTypography variant="h4" > Escolha de atividades</StyledTypography >
       {
-        activitiesData === null ? (
-          <ActivitiesPageErrorMessage errorMessage={activitiesError?.message}/>
+        !dates ? (
+          <ActivitiesPageErrorMessage errorMessage={dateError?.message} />
         ) : (
-          <></>
-        )  
+          <ActivitiesContainer dates={dates} />
+        )
       }
     </Wrapper>
   );
@@ -24,11 +27,8 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  h1 {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 34px;
-    line-height: 40px;
-    color: #000000;
-  }
+`;
+
+const StyledTypography = styled(Typography)`
+  margin-bottom: 37px!important;
 `;
