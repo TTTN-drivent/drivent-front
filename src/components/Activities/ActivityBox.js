@@ -12,7 +12,7 @@ export default function ActivityBox({ activityData }) {
   const [isRegistered, setIsRegistered] = useState(false);
   const [currentCapacity, setCurrentCapacity] = useState(activityData.capacity);
   const duration = ((activityData.endAt - activityData.startAt)/1000/60).toFixed(0);
-
+  
   useEffect( () => {
     if(!activityRegisterData) {
       getActivityRegister(activityData.id);
@@ -41,7 +41,14 @@ export default function ActivityBox({ activityData }) {
       await saveActivity(body);
       toast ('Registro realizado com sucesso');
     } catch (error) {
-      toast ('Não foi possível realizar o seu registro');
+      const errorStatus = error.message.slice(-3);
+      if(errorStatus === '403') {
+        toast ('Vagas esgotadas!');
+      } else if (errorStatus === '409') {
+        toast ('Você está inscrito em outra atividade neste horário!');
+      } else {
+        toast ('Não foi possível realizar o seu registro');
+      }
     }
   };
 

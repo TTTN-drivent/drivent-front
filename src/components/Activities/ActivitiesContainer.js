@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ActivityBox from './ActivityBox';
 
 const activityData = {
-  id: 3,
+  id: 6,
   name: 'LoL: Montando o PC ideal',
   capacity: 1,
   startAt: new Date('2023-01-23T09:00:00'),
