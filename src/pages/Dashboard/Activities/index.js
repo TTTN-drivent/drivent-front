@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import useActivityDates from '../../../hooks/api/useActivityDates';
 import ActivitiesPageErrorMessage from '../../../components/ActivitiesPageErrorMessage/ActivitiesPageErrorMessage';
-import { ActivitiesContainer } from '../../../components/ActivitiesContainer';
+import ActivitiesContainer from '../../../components/ActivitiesContainer';
 
 export default function Activities() {
   const { dates, dateError } = useActivityDates();

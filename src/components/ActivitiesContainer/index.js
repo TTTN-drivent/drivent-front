@@ -1,13 +1,21 @@
 import { Typography } from '@material-ui/core';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import Button from '../../../components/Form/Button';
-import useActivity from '../../../hooks/api/useActivity';
+import Button from '../../components/Form/Button';
+import useActivity from '../../hooks/api/useActivity';
 
 //Componente só para exemplificar (RETIRAR DEPOIS)
 function ActivityList({ selectedDate }) {
-  const { activity } = useActivity(selectedDate.id);
+  const { activity, getActivity } = useActivity();
+
+  const requestActivity = useCallback(async() => {
+    return getActivity(selectedDate.id);
+  }, [selectedDate, getActivity]);
+
+  useEffect(() => {
+    requestActivity();
+  }, [selectedDate]);
 
   return (
     < >
@@ -21,7 +29,6 @@ export default function ActivitiesContainer({ dates }) {
 
   return (
     <>
-      <StyledTypography variant="h4" > Escolha de atividades</StyledTypography >
       {
         !selectedDate ?
           <StyledSubtitle variant="h6">Primeiro, filtre pelo dia do evento:</StyledSubtitle> :
@@ -47,10 +54,6 @@ export default function ActivitiesContainer({ dates }) {
     </>
   );
 }
-
-const StyledTypography = styled(Typography)`
-  margin-bottom: 37px!important;
-`;
 
 const StyledSubtitle = styled(Typography)`
   color: #8E8E8E;
