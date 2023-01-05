@@ -66,10 +66,10 @@ const Hotel = styled.div`
   padding: 10px;
   > img {
     height: 110px;
-    object-fit: cover;
     width: 100%;
     border-radius: 5px;
     margin-bottom: 10px;
+    object-fit: cover;
   }
 `;
 
