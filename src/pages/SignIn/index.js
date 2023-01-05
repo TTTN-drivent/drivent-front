@@ -1,8 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import qs from 'query-string';
+import UserContext from '../../contexts/UserContext';
+import axios from 'axios';
+import loading from '../../assets/images/loading.gif';
 
 import AuthLayout from '../../layouts/Auth';
 
@@ -12,7 +14,6 @@ import Link from '../../components/Link';
 import { Row, Title, Label } from '../../components/Auth';
 
 import EventInfoContext from '../../contexts/EventInfoContext';
-import UserContext from '../../contexts/UserContext';
 
 import useSignIn from '../../hooks/api/useSignIn';
 import styled from 'styled-components';
@@ -21,6 +22,7 @@ import imggithub from '../../assets/images/github.png';
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const { loadingSignIn, signIn } = useSignIn();
 
@@ -46,7 +48,7 @@ export default function SignIn() {
     const GITHUB_URL = 'https://github.com/login/oauth/authorize';
     const params = {
       response_type: 'code',
-      scope: 'user',
+      scope: 'user:email',
       client_id: process.env.REACT_APP_CLIENT_ID,
       redirect_uri: process.env.REACT_APP_REDIRECT_URL,
     };
@@ -54,6 +56,29 @@ export default function SignIn() {
     const authURL = `${GITHUB_URL}?${queryString}`;
     window.location.href = authURL;
   }
+
+  const buscaDadosDoUsuario = async() => {
+    const { code } = qs.parseUrl(window.location.href).query;
+    setLoader(true);
+    if (code) {
+      try {
+        const response = await axios.post('http://localhost:4000/auth/logingithub', { code });
+        console.log(response.data);
+        navigate('/dashboard');
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('não tem código');
+    }
+    setLoader(false);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      buscaDadosDoUsuario();
+    }, 50);
+  }, []);
 
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
@@ -78,10 +103,16 @@ export default function SignIn() {
         </form>
       </Row>
       <Row>
-        <StyledButtonGitHub onClick={() => redirectToGitHub()}>
-          <img src={imggithub} />
-          Login Com GitHub
-        </StyledButtonGitHub>
+        {loader ? (
+          <StyledLoader>
+            <img className="loader" src={loading} alt="loading" />
+          </StyledLoader>
+        ) : (
+          <StyledButtonGitHub onClick={() => redirectToGitHub()}>
+            <img src={imggithub} />
+            Login Com GitHub
+          </StyledButtonGitHub>
+        )}
       </Row>
       <Row>
         <Link to="/enroll">Não possui login? Inscreva-se</Link>
@@ -94,7 +125,7 @@ const StyledButtonGitHub = styled.button`
   background-color: #262626;
   color: white;
   width: 100%;
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,8 +135,20 @@ const StyledButtonGitHub = styled.button`
   border-radius: 5px;
 
   img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     margin-right: 10px;
+  }
+`;
+
+const StyledLoader = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .loader {
+    width: 50px;
   }
 `;
