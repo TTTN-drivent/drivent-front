@@ -2,27 +2,46 @@ import styled from 'styled-components';
 import { RiLoginBoxLine, RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import { useState, useEffect } from 'react';
 import useActivityRegister from '../../hooks/api/useActivityRegister';
+import useSaveActivity from '../../hooks/api/useSaveActivity';
+import { toast } from 'react-toastify';
 
 export default function ActivityBox({ activityData }) {
   const { activityRegisterData, getActivityRegister } = useActivityRegister();
+  const { saveActivityLoading, saveActivity } = useSaveActivity();
   const [isFull, setIsFull] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [currentCapacity, setCurrentCapacity] = useState(activityData.capacity);
-  const duration = 60;
-  //const duration = ((activityData.endAt - activityData,startAt)/1000/60).toFixed(0);
+  const duration = ((activityData.endAt - activityData.startAt)/1000/60).toFixed(0);
 
   useEffect( () => {
-    getActivityRegister(1);
-    checkActivityStatus();
-  }, [activityRegisterData]);
+    if(!activityRegisterData) {
+      getActivityRegister(activityData.id);
+    } else {
+      checkActivityStatus();
+    }
+  }, [saveActivityLoading, activityRegisterData]);
 
   function checkActivityStatus() {
-    const registersCount = activityRegisterData.length();
-    // fazer a lógica se o usuário já tá inscrito
+    const { registersCount } = activityRegisterData;
+
     if(registersCount >= activityData.capacity) {
       setIsFull(true);
     } else {
       setCurrentCapacity(activityData.capacity - registersCount);
+    }
+    setIsRegistered(activityRegisterData.isRegistered);
+  };
+
+  async function submitActivityRegister(activityId) {
+    const body = {
+      activityId,
+    };
+    
+    try {
+      await saveActivity(body);
+      toast ('Registro realizado com sucesso');
+    } catch (error) {
+      toast ('Não foi possível realizar o seu registro');
     }
   };
 
@@ -30,17 +49,13 @@ export default function ActivityBox({ activityData }) {
     <ActivityWrapper duration={duration} isRegistered={isRegistered}>
       <ActivityInfos>
         <h3>
-          {/* {activityData.name} */}
-          Minecraft: Montando o PC ideal
+          {activityData.name}
         </h3>
         <p>
-          {/*{activityData.startAt.toTimeString().slice(0,5)};
-          -
-          {activityData.endAt.toTimeString().slice(0,5)}; */}
-          09:00 - 10:00
+          {activityData.startAt.toTimeString().slice(0, 5)} - {activityData.endAt.toTimeString().slice(0, 5)}
         </p>
       </ActivityInfos>
-      <ActivityCapacity isRegistered={isRegistered} isFull={isFull}>
+      <ActivityCapacity isRegistered={isRegistered} isFull={isFull} onClick={() => submitActivityRegister(activityData.id)}>
         { isRegistered ? (<RiCheckboxCircleLine/>) : (isFull ? ( <RiCloseCircleLine /> ) : ( <RiLoginBoxLine /> )) }
         <p>
           { isRegistered ? ('Inscrito') : (isFull ? 'Esgotado' : `${currentCapacity} Vagas`)}
@@ -52,8 +67,7 @@ export default function ActivityBox({ activityData }) {
 
 const ActivityWrapper = styled.div`
   width: 100%;
-  min-height: 80px;
-  height: ${ ({ duration }) => (`${duration/60*80}px`)};
+  min-height: ${ ({ duration }) => ( duration <= 60 ? '80px' : `${duration/60*80}px`)};
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -84,6 +98,7 @@ const ActivityCapacity = styled.div`
   align-items: center;
   font-size: 20px;
   cursor: ${ ({ isRegistered, isFull }) => isRegistered || isFull ? 'initial' : 'pointer'};
+  pointer-events: ${ ({ isRegistered, isFull }) => isRegistered || isFull ? 'none' : 'initial'};
   border-left: 1px solid #CFCFCF;
   margin-left: 10px;
   padding-left: 10px;

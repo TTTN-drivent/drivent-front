@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 import ActivityBox from './ActivityBox';
 
+const activityData = {
+  id: 3,
+  name: 'LoL: Montando o PC ideal',
+  capacity: 1,
+  startAt: new Date('2023-01-23T09:00:00'),
+  endAt: new Date('2023-01-23T11:00:00'),
+  activityDateId: 2,
+  activityLocalId: 2
+};
+
 export default function ActivitiesContainer() {
   return (
     <ActivitiesWrapper>
@@ -9,7 +19,7 @@ export default function ActivitiesContainer() {
           Auditório Principal
         </h2>
         <ActivitiesBoxWrapper>
-          <ActivityBox/>
+          <ActivityBox activityData={activityData}/>
         </ActivitiesBoxWrapper>
       </ActivitiesLocal>
       <ActivitiesLocal>
@@ -17,17 +27,16 @@ export default function ActivitiesContainer() {
           Auditório Lateral
         </h2>
         <ActivitiesBoxWrapper>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
-          <ActivityBox/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
+          <ActivityBox activityData={activityData}/>
         </ActivitiesBoxWrapper>
       </ActivitiesLocal>
       <ActivitiesLocal>
@@ -35,7 +44,7 @@ export default function ActivitiesContainer() {
           Sala de Workshop
         </h2>
         <ActivitiesBoxWrapper>
-          <ActivityBox/>
+          <ActivityBox activityData={activityData}/>
         </ActivitiesBoxWrapper>
       </ActivitiesLocal>
     </ActivitiesWrapper>
@@ -51,7 +60,7 @@ const ActivitiesWrapper = styled.div `
 
 const ActivitiesLocal = styled.div`
   width: 100%;
-  height: 80%;
+  height: 90%;
 
   h2{
     text-align: center;
@@ -73,7 +82,7 @@ const ActivitiesBoxWrapper = styled.div`
   padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  flex: none;
   gap: 10px;
   border: 1px solid #D7D7D7;
   overflow-y: auto;
