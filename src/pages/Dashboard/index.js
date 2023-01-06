@@ -1,6 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
+import qs from 'query-string';
 
 import EventInfoContext from '../../contexts/EventInfoContext';
 
