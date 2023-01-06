@@ -57,27 +57,27 @@ export default function SignIn() {
     window.location.href = authURL;
   }
 
-  const buscaDadosDoUsuario = async() => {
-    const { code } = qs.parseUrl(window.location.href).query;
-    setLoader(true);
-    if (code) {
-      try {
-        const response = await axios.post('http://localhost:4000/auth/logingithub', { code });
-        console.log(response.data);
-        navigate('/dashboard');
-      } catch (error) {
-        console.log(error);
+  const buscaDadosDoUsuario = () => {
+    setTimeout(async() => {
+      const { code } = qs.parseUrl(window.location.href).query;
+      setLoader(true);
+      if (code) {
+        try {
+          const response = await axios.post('http://localhost:4000/auth/logingithub', { code });
+          setUserData(response.data);
+          navigate('/dashboard');
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log('não tem código');
       }
-    } else {
-      console.log('não tem código');
-    }
-    setLoader(false);
+      setLoader(false);
+    }, 100);
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      buscaDadosDoUsuario();
-    }, 50);
+    buscaDadosDoUsuario();
   }, []);
 
   return (
