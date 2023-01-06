@@ -31,7 +31,7 @@ export async function saveActivity(body, token) {
 }
 
 export async function getActivityRegister(id, token) {
-  const response = await api.get(`/activities/${id}`, {
+  const response = await api.get(`/activities/registers/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

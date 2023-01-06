@@ -12,7 +12,7 @@ function weekdayEntoPtBr(weekday) {
     return 'Segunda';
   case 'Tue':
     return 'Terça';
-  case 'Wen':
+  case 'Wed':
     return 'Quarta';
   case 'Thu':
     return 'Quinta';

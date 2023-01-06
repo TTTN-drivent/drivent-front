@@ -1,28 +1,9 @@
 import { Typography } from '@material-ui/core';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import Button from '../../components/Form/Button';
-import useActivity from '../../hooks/api/useActivity';
-
-//Componente só para exemplificar (RETIRAR DEPOIS)
-function ActivityList({ selectedDate }) {
-  const { activity, getActivity } = useActivity();
-
-  const requestActivity = useCallback(async() => {
-    return getActivity(selectedDate.id);
-  }, [selectedDate, getActivity]);
-
-  useEffect(() => {
-    requestActivity();
-  }, [selectedDate]);
-
-  return (
-    < >
-      {activity?.map((value) => <div key={value.id}>{value.name}</div>)}
-    </>
-  );
-}
+import ActivitiesLocals from '../Activities/ActivitiesLocals';
 
 export default function ActivitiesContainer({ dates }) {
   const [selectedDate, setSelectedDate] = useState();
@@ -48,7 +29,7 @@ export default function ActivitiesContainer({ dates }) {
       </DateMenu>
       {
         selectedDate ?
-          <ActivityList selectedDate={selectedDate} /> :
+          <ActivitiesLocals selectedDate={selectedDate} /> :
           null
       }
     </>

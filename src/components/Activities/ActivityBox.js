@@ -11,7 +11,7 @@ export default function ActivityBox({ activityData }) {
   const [isFull, setIsFull] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [currentCapacity, setCurrentCapacity] = useState(activityData.capacity);
-  const duration = ((activityData.endAt - activityData.startAt)/1000/60).toFixed(0);
+  const duration = ((Date.parse(activityData.endAt) - Date.parse(activityData.startAt))/1000/60).toFixed(0);
   
   useEffect( () => {
     if(!activityRegisterData) {
@@ -59,7 +59,7 @@ export default function ActivityBox({ activityData }) {
           {activityData.name}
         </h3>
         <p>
-          {activityData.startAt.toTimeString().slice(0, 5)} - {activityData.endAt.toTimeString().slice(0, 5)}
+          {activityData.startAt.slice(11, 16)} - {activityData.endAt.slice(11, 16)}
         </p>
       </ActivityInfos>
       <ActivityCapacity isRegistered={isRegistered} isFull={isFull} onClick={() => submitActivityRegister(activityData.id)}>
