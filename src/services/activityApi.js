@@ -11,7 +11,7 @@ export async function getDates(token) {
 };
 
 export async function getActivities(id, token) {
-  const response = await api.get(`/activities/${id}`, {
+  const response = await api.get(`/activities/dates/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -39,4 +39,14 @@ export async function getActivityRegister(id, token) {
 
   return response.data;
 }
+
+export async function getLocals(token) {
+  const response = await api.get('/activities/locals', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
 //

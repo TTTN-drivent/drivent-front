@@ -9,7 +9,7 @@ export default function ActivitiesList({ localName, activitiesData }) {
         {localName}
       </h2>
       <ActivitiesBoxWrapper>
-        {activitiesData.map((activity) => <ActivityBox key={activity.id} activityData={activity}/>)}
+        {activitiesData?.map((activity) => <ActivityBox key={activity.id} activityData={activity}/>)}
       </ActivitiesBoxWrapper>
     </ActivitiesLocal>
   );

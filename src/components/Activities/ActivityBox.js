@@ -7,11 +7,13 @@ import { toast } from 'react-toastify';
 
 export default function ActivityBox({ activityData }) {
   const { activityRegisterData, getActivityRegister } = useActivityRegister();
-  const { saveActivityLoading, saveActivity } = useSaveActivity();
+  const { saveActivity } = useSaveActivity();
   const [isFull, setIsFull] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [currentCapacity, setCurrentCapacity] = useState(activityData.capacity);
-  const duration = ((Date.parse(activityData.endAt) - Date.parse(activityData.startAt))/1000/60).toFixed(0);
+  const milliseconds = 1000;
+  const seconds = 60;
+  const duration = ((Date.parse(activityData.endAt) - Date.parse(activityData.startAt))/milliseconds/seconds).toFixed(0);
   
   useEffect( () => {
     if(!activityRegisterData) {
@@ -19,7 +21,7 @@ export default function ActivityBox({ activityData }) {
     } else {
       checkActivityStatus();
     }
-  }, [saveActivityLoading, activityRegisterData]);
+  }, [activityRegisterData]);
 
   function checkActivityStatus() {
     const { registersCount } = activityRegisterData;
@@ -39,6 +41,7 @@ export default function ActivityBox({ activityData }) {
     
     try {
       await saveActivity(body);
+      setIsRegistered(true);
       toast ('Registro realizado com sucesso');
     } catch (error) {
       const errorStatus = error.message.slice(-3);
@@ -74,7 +77,7 @@ export default function ActivityBox({ activityData }) {
 
 const ActivityWrapper = styled.div`
   width: 100%;
-  min-height: ${ ({ duration }) => ( duration <= 60 ? '80px' : `${duration/60*80}px`)};
+  min-height: ${ ({ duration }) => ( duration <= 60 ? '80px' : `${duration/60*80 + Math.floor((duration-1)/60)*10}px`)};
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -97,7 +100,7 @@ const ActivityInfos = styled.div`
 
 const ActivityCapacity = styled.div`
   color: ${ ({ isRegistered, isFull }) => isRegistered ? '#078632' : isFull ? '#CC6666' : '#078632'};
-  width: 75px;
+  width: 80px;
   height: 100%;
   display: flex;
   flex-direction: column;

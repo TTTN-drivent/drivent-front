@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 
 import useActivity from '../../hooks/api/useActivity';
+import useActivityLocals from '../../hooks/api/useActivityLocals';
 import { useCallback, useEffect, useState } from 'react';
 import ActivitiesList from './ActivitiesList';
 
 export default function ActivitiesLocals({ selectedDate } ) {
   const { activity, getActivity } = useActivity();
-  const [localsData, setLocalsData] = useState({});
-  const [localsNames, setLocalsNames] = useState([]);
+  const { localsData } = useActivityLocals();
+  const [activityLocalsData, setActivityLocalsData] = useState({});
 
   const requestActivity = useCallback(async() => {
     return getActivity(selectedDate.id);
-  }, [selectedDate, getActivity]);
+  }, [selectedDate]);
 
   useEffect(() => {
     requestActivity();
@@ -19,31 +20,28 @@ export default function ActivitiesLocals({ selectedDate } ) {
 
   useEffect(() => {
     if(activity) {
-      getLocals();
+      getLocalsInfo();
     }
-  }, [selectedDate, activity]);
+  }, [activity]);
 
-  function getLocals() {
+  function getLocalsInfo() {
     let dataObject = {};
-    const localsArray = [];
 
     for(let i=0; i<activity.length; i++) {
       const localName = activity[i].ActivityLocal.name;
       if(dataObject[localName]) {
         dataObject[localName].push(activity[i]);
       } else {
-        localsArray.push(localName);
         const newLocal = { [localName]: [activity[i]] };
         dataObject = { ...dataObject, ...newLocal };
       }
     }
-    setLocalsData(dataObject);
-    setLocalsNames(localsArray);
+    setActivityLocalsData(dataObject);
   }
-
+  
   return (
     <ActivitiesWrapper>
-      {localsNames.map((local, index) => <ActivitiesList key={index} localName={local} activitiesData={localsData[local]} />)}
+      {localsData?.map((local, index) => <ActivitiesList key={index} localName={local.name} activitiesData={activityLocalsData[local.name]} />)}
     </ActivitiesWrapper>
   );
 }
