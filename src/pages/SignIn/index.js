@@ -65,7 +65,7 @@ export default function SignIn() {
         try {
           const response = await axios.post('http://localhost:4000/auth/logingithub', { code });
           setUserData(response.data);
-          navigate('/dashboard');
+          navigate('/');
         } catch (error) {
           console.log(error);
         }
